@@ -6,31 +6,53 @@ using UnityEngine;
 /// </summary>
 public class StartBattle : MonoBehaviour
 {
-    void Start()
+    GetEnemyStats GetEnemyStatsFunc;
+
+    public string enemyName;
+    public string currentEnemy;
+    public int enemyLvl;
+    public int enemyStats;
+    public int enemyAtk;
+    public int enemyDef;
+    public int enemyEva;
+    public int enemyCrt;
+    public int enemyHP;
+    public int tmpStats;
+    public string[] namesList;
+    public string[] enemyList;
+    public int playerLvl;
+
+    private void Start()
     {
-        public string enemyName = namesList[Random.Range(0,namesList.Count-1)];
-        public string currentEnemy = enemyList[Random.Range(0,enemyList.Count-1)];
-        public int enemyLvl = Random.Range(playerLvl-6,playerLvl+1);
+        string[] enemyList = { "Test1", "Test2", "Test3" };
+        StartBattleFunc();
+        Debug.Log("Current Enemy: " + enemyName + " the " + currentEnemy);
+        Debug.Log("EnemyLvl: " + enemyLvl.ToString());
+        Debug.Log("Atk: " + enemyAtk);
+        Debug.Log("Def: " + enemyDef.ToString());
+        Debug.Log("Eva: " + enemyEva.ToString());
+        Debug.Log("Crt: " + enemyCrt.ToString());
+        Debug.Log("HP: " + enemyHP.ToString());
+    }
+
+    public void StartBattleFunc()
+    {
+        string enemyName = namesList[Random.Range(0, namesList.Length-1)];
+        string currentEnemy = enemyList[Random.Range(0, enemyList.Length - 1)];
+        int enemyLvl = Random.Range(playerLvl-6,playerLvl+1);
         if (enemyLvl < 1) {
             enemyLvl = 1;
         }
-        GetEnemyStats.Start();
-        public int enemyAtk = tmpStats;
-        GetEnemyStats.Start();
-        public int enemyDef = tmpStats;
-        GetEnemyStats.Start();
-        public int enemyEva = tmpStats;    
-        GetEnemyStats.Start();
-        public int enemyCrt = tmpStats;    
-        GetEnemyStats.Start();
-        public int enemyHP = Math.Round(tmpStats*10.532976543);    
+        int tmpStats = 1;
+        GetEnemyStats.GetEnemyStatsFunc();
+        int enemyAtk = tmpStats;
+        GetEnemyStats.GetEnemyStatsFunc();
+        int enemyDef = tmpStats;
+        GetEnemyStats.GetEnemyStatsFunc();
+        int enemyEva = tmpStats;
+        GetEnemyStats.GetEnemyStatsFunc();
+        int enemyCrt = tmpStats;
+        GetEnemyStats.GetEnemyStatsFunc();
+        int enemyHP = (int)Mathf.Round((float)(tmpStats * 10.532976543));    
     }
-/*
-    void Update()
-    {
-
-    }
-*/
-
-
 }

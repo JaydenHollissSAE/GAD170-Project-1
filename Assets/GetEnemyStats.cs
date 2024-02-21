@@ -6,14 +6,16 @@ using UnityEngine;
 /// </summary>
 public class GetEnemyStats : MonoBehaviour
 {
-    void Start()
+    public int tmpStats;
+    public int enemyLvl;
+    public void GetEnemyStatsFunc()
     {
         /// <summary>
         /// Creates a temporary stat for assignment.
         /// </summary>
-    public int tmpStats = Math.Round((Random.Ragne(0f,1f))*float(enemyLvl));
-    if (tmpStats < 1) {
-        tmpstats = 1;
+        int tmpStats = (int)Mathf.Round((Random.Range(0f,1f))*enemyLvl);
+        if (tmpStats < 1) {
+            tmpStats = 1;
         }
     }
 }
