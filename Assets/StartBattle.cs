@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
@@ -63,4 +63,4 @@ public class StartBattle : MonoBehaviour
         Debug.Log("Crt: " + enemyCrt);
         Debug.Log("HP: " + enemyHP);
     }
-}
+}*/
