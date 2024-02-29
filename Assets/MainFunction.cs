@@ -37,6 +37,7 @@ public class MainFunction : MonoBehaviour
     public int expObtained;
     public int expNeeded = 20;
     public bool lvlUp = false;
+    public int currentplayerHP;
 
     public void Start()
     {
@@ -156,15 +157,16 @@ public class MainFunction : MonoBehaviour
                 Debug.Log(narCol + "Leveled Up!" + endCol);
                 playerLvl += 1;
                 lvlUp = true;
-                Debug.Log(narCol + "Reroll Player Stats (HP will not be recovered if stats are kept)? (Y/N)" + endCol);
-
+                Debug.Log(narCol + "Reroll Player Stats? (Y/N)" + endCol);
+                playerHP = currentplayerHP - playerHP;
             }
         }
-        if (playerHP <= 0)
+        else if (playerHP <= 0)
         {
             Debug.Log(narCol + "You were defeated" + endCol);
             BattleWon = true;
             Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
+            playerHP = currentplayerHP - playerHP;
         }
     }
 
@@ -272,5 +274,7 @@ public class MainFunction : MonoBehaviour
         playerCrt = tmpStats;
         GetStatsFunc();
         playerHP = (int)Mathf.Round((float)(tmpStats * 15.532976543));
+        currentplayerHP = playerHP;
+        ViewStatsPlayer();
     }
 }
