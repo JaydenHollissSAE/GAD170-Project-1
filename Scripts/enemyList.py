@@ -1,1 +1,0 @@
-enemyList = ["Dragon","Elf","Goblin","Serpent","Angle","Demon"]
