@@ -120,10 +120,10 @@ public class MainFunction : MonoBehaviour
     public void BattlePhase()
     {
         Debug.Log(narCol + "You attack!" + endCol);
-        if (((Random.Range(0.0f, enemyEva * 10f) / 100) != 0.4))
+        if (Random.Range(0, 100) > enemyEva)
         {
             enemyHP = (int)(enemyHP - (playerAtk * (enemyDef * 0.01)));
-            if ((Random.Range(0.0f, playerCrt * 10f)) / 100 == 0.4)
+            if (Random.Range(0, 100) < playerCrt)
             {
                 enemyHP = (int)(enemyHP - (playerAtk * (enemyDef * 0.01)));
                 Debug.Log(narCol + "Critical Hit!" + endCol);
@@ -134,10 +134,10 @@ public class MainFunction : MonoBehaviour
             Debug.Log(narCol + "The attack missed!" + endCol);
         }
         Debug.Log(narCol + "The enemy strickes back!" + endCol);
-        if (((Random.Range(0.0f, playerEva * 10f) / 100) != 0.4))
+        if (Random.Range(0, 100) > playerEva)
         {
             playerHP = (int)(playerHP - (enemyAtk * (playerDef * 0.01)));
-            if ((Random.Range(0.0f, playerCrt * 10f)) / 100 == 0.4)
+            if (Random.Range(0, 100) < enemyCrt)
             {
                 playerHP = (int)(playerHP - (enemyAtk * (playerDef * 0.01)));
                 Debug.Log(narCol + "Critical Hit!" + endCol);
@@ -242,8 +242,16 @@ public class MainFunction : MonoBehaviour
         enemyDef = tmpStats;
         GetStatsFunc();
         enemyEva = tmpStats;
+        if (enemyEva > 60)
+        {
+            enemyEva = Random.Range(0, 60);
+        }
         GetStatsFunc();
         enemyCrt = tmpStats;
+        if (enemyCrt > 75)
+        {
+            enemyCrt = Random.Range(0, 75);
+        }
         GetStatsFunc();
         enemyHP = (int)Mathf.Round((float)(tmpStats * 10.532976543));
 
@@ -270,8 +278,16 @@ public class MainFunction : MonoBehaviour
         playerDef = tmpStats;
         GetStatsFunc();
         playerEva = tmpStats;
+        if (playerEva > 60)
+        {
+            playerEva = Random.Range(0, 60);
+        }
         GetStatsFunc();
         playerCrt = tmpStats;
+        if (playerCrt > 75)
+        {
+            playerCrt = Random.Range(0, 75);
+        }
         GetStatsFunc();
         playerHP = (int)Mathf.Round((float)(tmpStats * 15.532976543));
         currentplayerHP = playerHP;
