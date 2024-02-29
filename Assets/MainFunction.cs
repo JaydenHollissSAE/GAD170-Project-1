@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MainFunction : MonoBehaviour
@@ -25,47 +26,213 @@ public class MainFunction : MonoBehaviour
     public int playerEva;
     public int playerCrt;
     public int playerHP;
+    public int searchAmount;
+    public string searchText;
+    public string narCol = "<color=#CEA200>";
+    public string plCol = "<color=#3C78EF>";
+    public string enCol = "<color=#CB0606>";
+    public string endCol = "</color>";
+    public bool searchStatus = true;
+    public bool BattleWon = false;
+    public int expObtained;
+    public int expNeeded = 20;
+    public bool lvlUp = false;
 
-    private void Start()
+    public void Start()
     {
-        playerLvl = 3;
+        Debug.Log(narCol + "Welcome to Fishing!" + endCol);
+        Debug.Log(narCol + "Controls: E = Enemy Stats, P = Player Stats, A = Attack" + endCol);
+        playerLvl = 1;
         GetPlayerStatsFunc();
-        //string[] enemyList = { "Test1", "Test2", "Test3" };
         GetEnemyStatsFunc();
-        //Debug.Log("Current Enemy: " + enemyName + " the " + currentEnemy);
-        Debug.Log("Player Lvl: " + playerLvl);
-        Debug.Log("Player Atk: " + playerAtk);
-        Debug.Log("Player Def: " + playerDef);
-        Debug.Log("Player Eva: " + playerEva);
-        Debug.Log("Enemv Crt: " + playerCrt);
-        Debug.Log("Player HP: " + playerHP);
-        Debug.Log("Enemy Lvl: " + enemyLvl);
-        Debug.Log("Enemy Atk: " + enemyAtk);
-        Debug.Log("Enemy Def: " + enemyDef);
-        Debug.Log("Enemy Eva: " + enemyEva);
-        Debug.Log("Enemy Crt: " + enemyCrt);
-        Debug.Log("Enemy HP: " + enemyHP);
+        MainSequence();
+    }
+
+    public void MainSequence()
+    {
+        BattleWon = false;
+        Debug.Log(narCol + "Begin Fishing" + endCol);
+        EnemySearch();
+        StartBattle();
     }
 
     public void Update()
     {
-        
+        if (BattleWon)
+        {
+            GetEnemyStatsFunc();
+            if (lvlUp)
+            {
+                if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    GetPlayerStatsFunc();
+                    lvlUp = false;
+                    Debug.Log(narCol + "Stats Rerolled" + endCol);
+                    Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
+                }
+                if (Input.GetKeyDown(KeyCode.N))
+                {
+                    lvlUp = false;
+                    Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
+                }
+            }
+            else 
+            { 
+                if (Input.GetKeyDown(KeyCode.Y)) 
+                {
+                    if (playerHP <= 0)
+                    {
+                        Start();
+                    }
+                    else
+                    {
+                        MainSequence();
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.N))
+                {
+                    Debug.Log(narCol + "Thank you for Fishing today!" + endCol);
+                    Destroy(this.gameObject);
+                }
+            }
+        }
+        else if (searchStatus)
+        {
+            {
+                if (Input.GetKeyDown(KeyCode.P))
+                {
+                    Debug.Log(narCol + "Displaying Player Stats" + endCol);
+                    ViewStatsPlayer();
+                }
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Debug.Log(narCol + "Displaying Enemy Stats" + endCol);
+                    ViewStatsEnemy();
+                }
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    BattlePhase();
+                }
+            }
+        }
+    }
+    public void BattlePhase()
+    {
+        Debug.Log(narCol + "You attack!" + endCol);
+        if (((Random.Range(0.0f, enemyEva * 10f) / 100) != 0.4))
+        {
+            enemyHP = (int)(enemyHP - (playerAtk * (enemyDef * 0.01)));
+            if ((Random.Range(0.0f, playerCrt * 10f)) / 100 == 0.4)
+            {
+                enemyHP = (int)(enemyHP - (playerAtk * (enemyDef * 0.01)));
+                Debug.Log(narCol + "Critical Hit!" + endCol);
+            }
+        }
+        else 
+        {
+            Debug.Log(narCol + "The attack missed!" + endCol);
+        }
+        Debug.Log(narCol + "The enemy strickes back!" + endCol);
+        if (((Random.Range(0.0f, playerEva * 10f) / 100) != 0.4))
+        {
+            playerHP = (int)(playerHP - (enemyAtk * (playerDef * 0.01)));
+            if ((Random.Range(0.0f, playerCrt * 10f)) / 100 == 0.4)
+            {
+                playerHP = (int)(playerHP - (enemyAtk * (playerDef * 0.01)));
+                Debug.Log(narCol + "Critical Hit!" + endCol);
+            }
+        }
+        else
+        {
+            Debug.Log(narCol + "The attack missed!" + endCol);
+        }
+        if (enemyHP <= 0) 
+        {
+            Debug.Log(narCol + "Enemy Defeated!" + endCol);
+            expObtained = Random.Range(20+enemyLvl, 20+(enemyLvl*10));
+            BattleWon = true;
+            if (expObtained >= expNeeded) 
+            {
+                Debug.Log(narCol + "Leveled Up!" + endCol);
+                playerLvl += 1;
+                lvlUp = true;
+                Debug.Log(narCol + "Reroll Player Stats (HP will not be recovered if stats are kept)? (Y/N)" + endCol);
 
+            }
+        }
+        if (playerHP <= 0)
+        {
+            Debug.Log(narCol + "You were defeated" + endCol);
+            BattleWon = true;
+            Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
+        }
     }
 
 
 
+    public void ViewStatsPlayer()
+    {
+        Debug.Log(plCol + "Player Lvl: " + playerLvl + endCol);
+        Debug.Log(plCol + "Player Atk: " + playerAtk + endCol);
+        Debug.Log(plCol + "Player Def: " + playerDef + endCol);
+        Debug.Log(plCol + "Player Eva: " + playerEva + endCol);
+        Debug.Log(plCol + "Player Crt: " + playerCrt + endCol);
+        Debug.Log(plCol + "Player HP: " + playerHP + endCol);
+    }
+
+    public void ViewStatsEnemy()
+    {
+        Debug.Log(enCol + "Enemy Lvl: " + enemyLvl + endCol);
+        Debug.Log(enCol + "Enemy Atk: " + enemyAtk + endCol);
+        Debug.Log(enCol + "Enemy Def: " + enemyDef + endCol);
+        Debug.Log(enCol + "Enemy Eva: " + enemyEva + endCol);
+        Debug.Log(enCol + "Enemy Crt: " + enemyCrt + endCol);
+        Debug.Log(enCol + "Enemy HP: " + enemyHP + endCol);
+    }
+
+    public void EnemySearch()
+    {
+        searchStatus = false;
+        searchText = "";
+        searchAmount = Random.Range(5, 15);
+        for (int i = 0; i < searchAmount; i++)
+        {
+            if (i != 0)
+            {
+                if (i % 3 == 0)
+                {
+                    searchText += " ";
+                }
+            }
+            searchText += ".";
+            Debug.Log(narCol + searchText + endCol);
+        }
+        searchStatus = true;
+    }
+
+    public void StartBattle()
+    {
+       if (enemyLvl > playerLvl)
+        {
+            currentEnemy = "a big one, this will be tough!";
+        }
+       else if (enemyLvl < playerLvl) {
+            currentEnemy = "a small one, should be an easy catch!";
+        }
+       else
+        {
+            currentEnemy = "around your level, can you handle this?";
+        }
+        Debug.Log("<color=#CEA200>It's " + currentEnemy + "</color>");
+    }
 
     public void GetEnemyStatsFunc()
     {
-        //string enemyName = namesList[Random.Range(0, namesList.Length - 1)];
-        //string currentEnemy = enemyList[Random.Range(0, enemyList.Length - 1)];
         enemyLvl = Random.Range(playerLvl - 6, playerLvl + 1);
         if (enemyLvl < 1)
         {
             enemyLvl = 1;
         }
-        Debug.Log("Run Stats");
         lvlBuffer = enemyLvl;
         GetStatsFunc();
         enemyAtk = tmpStats;
