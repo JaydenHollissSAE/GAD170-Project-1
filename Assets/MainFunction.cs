@@ -1,3 +1,4 @@
+using OpenCover.Framework.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
@@ -41,6 +42,9 @@ public class MainFunction : MonoBehaviour
 
     public void Start()
     {
+        /// <summary>
+        /// Begins the game.
+        /// </summary>
         Debug.Log(narCol + "Welcome to Fishing!" + endCol);
         Debug.Log(narCol + "Controls: E = Enemy Stats, P = Player Stats, A = Attack" + endCol);
         playerLvl = 1;
@@ -51,6 +55,9 @@ public class MainFunction : MonoBehaviour
 
     public void MainSequence()
     {
+        /// <summary>
+        /// The main sequence of events in the game to be repeated.
+        /// </summary>
         BattleWon = false;
         Debug.Log(narCol + "Begin Fishing" + endCol);
         EnemySearch();
@@ -59,11 +66,20 @@ public class MainFunction : MonoBehaviour
 
     public void Update()
     {
+        /// <summary>
+        /// Gameplay logic that constantly runs.
+        /// </summary>
         if (BattleWon)
         {
+            /// <summary>
+            /// Runs if a battle was won. Sets up for next battle or purges game based on input.
+            /// </summary>
             GetEnemyStatsFunc();
             if (lvlUp)
             {
+                /// <summary>
+                /// Determines based on player input if the player stats reroll or not when a level up occurs.
+                /// </summary>
                 if (Input.GetKeyDown(KeyCode.Y))
                 {
                     GetPlayerStatsFunc();
@@ -77,10 +93,16 @@ public class MainFunction : MonoBehaviour
                     Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
                 }
             }
-            else 
-            { 
+            else
+            {
+                /// <summary>
+                /// Determines if the game continues or not based on player input.
+                /// </summary>
                 if (Input.GetKeyDown(KeyCode.Y)) 
                 {
+                    /// <summary>
+                    /// Restarts sequence based on if player is alive or not.
+                    /// </summary>
                     if (playerHP <= 0)
                     {
                         Start();
@@ -92,6 +114,9 @@ public class MainFunction : MonoBehaviour
                 }
                 if (Input.GetKeyDown(KeyCode.N))
                 {
+                    /// <summary>
+                    /// Purges can sequence to end the game.
+                    /// </summary>
                     Debug.Log(narCol + "Thank you for Fishing today!" + endCol);
                     Destroy(this.gameObject);
                 }
@@ -99,6 +124,9 @@ public class MainFunction : MonoBehaviour
         }
         else if (searchStatus)
         {
+            /// <summary>
+            /// Determines gameplay actions based on player input.
+            /// </summary>
             {
                 if (Input.GetKeyDown(KeyCode.P))
                 {
@@ -119,12 +147,24 @@ public class MainFunction : MonoBehaviour
     }
     public void BattlePhase()
     {
+        /// <summary>
+        /// Runs logic for battle damage.
+        /// </summary>
+        /// <summary>
+        /// Player turn.
+        /// </summary>
         Debug.Log(narCol + "You attack!" + endCol);
         if (Random.Range(0, 100) > enemyEva)
         {
+            /// <summary>
+            /// Deals damage if the enemy didn't evade the attack.
+            /// </summary>
             enemyHP = (int)(enemyHP - (playerAtk * (enemyDef * 0.01)));
             if (Random.Range(0, 100) < playerCrt)
             {
+                /// <summary>
+                /// Deals damage again for a critical hit.
+                /// </summary>
                 enemyHP = (int)(enemyHP - (playerAtk * (enemyDef * 0.01)));
                 Debug.Log(narCol + "Critical Hit!" + endCol);
             }
@@ -133,12 +173,21 @@ public class MainFunction : MonoBehaviour
         {
             Debug.Log(narCol + "The attack missed!" + endCol);
         }
+        /// <summary>
+        /// Enemy turn.
+        /// </summary>
         Debug.Log(narCol + "The enemy strickes back!" + endCol);
         if (Random.Range(0, 100) > playerEva)
         {
+            /// <summary>
+            /// Deals damage if the player didn't evade the attack.
+            /// </summary>
             playerHP = (int)(playerHP - (enemyAtk * (playerDef * 0.01)));
             if (Random.Range(0, 100) < enemyCrt)
             {
+                /// <summary>
+                /// Deals damage again for a critical hit.
+                /// </summary>
                 playerHP = (int)(playerHP - (enemyAtk * (playerDef * 0.01)));
                 Debug.Log(narCol + "Critical Hit!" + endCol);
             }
@@ -149,11 +198,17 @@ public class MainFunction : MonoBehaviour
         }
         if (enemyHP <= 0) 
         {
+            /// <summary>
+            /// Runs enemy defeated sequence.
+            /// </summary>
             Debug.Log(narCol + "Enemy Defeated!" + endCol);
             expObtained = Random.Range(20+enemyLvl, 20+(enemyLvl*10));
             BattleWon = true;
             if (expObtained >= expNeeded) 
             {
+                /// <summary>
+                /// Sets stage for level up sequence.
+                /// </summary>
                 Debug.Log(narCol + "Leveled Up!" + endCol);
                 playerLvl += 1;
                 lvlUp = true;
@@ -163,6 +218,9 @@ public class MainFunction : MonoBehaviour
         }
         else if (playerHP <= 0)
         {
+            /// <summary>
+            /// Runs player defeated sequence.
+            /// </summary>
             Debug.Log(narCol + "You were defeated" + endCol);
             BattleWon = true;
             Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
@@ -174,6 +232,9 @@ public class MainFunction : MonoBehaviour
 
     public void ViewStatsPlayer()
     {
+        /// <summary>
+        /// Displays current player stats.
+        /// </summary>
         Debug.Log(plCol + "Player Lvl: " + playerLvl + endCol);
         Debug.Log(plCol + "Player Atk: " + playerAtk + endCol);
         Debug.Log(plCol + "Player Def: " + playerDef + endCol);
@@ -184,6 +245,9 @@ public class MainFunction : MonoBehaviour
 
     public void ViewStatsEnemy()
     {
+        /// <summary>
+        /// Displays current enemy stats.
+        /// </summary>
         Debug.Log(enCol + "Enemy Lvl: " + enemyLvl + endCol);
         Debug.Log(enCol + "Enemy Atk: " + enemyAtk + endCol);
         Debug.Log(enCol + "Enemy Def: " + enemyDef + endCol);
@@ -194,11 +258,17 @@ public class MainFunction : MonoBehaviour
 
     public void EnemySearch()
     {
+        /// <summary>
+        /// Runs enemy search sequence.
+        /// </summary>
         searchStatus = false;
         searchText = "";
         searchAmount = Random.Range(5, 15);
         for (int i = 0; i < searchAmount; i++)
         {
+            /// <summary>
+            /// Repeats search text randomly.
+            /// </summary>
             if (i != 0)
             {
                 if (i % 3 == 0)
@@ -214,7 +284,10 @@ public class MainFunction : MonoBehaviour
 
     public void StartBattle()
     {
-       if (enemyLvl > playerLvl)
+        /// <summary>
+        /// Gives player a hint about the level of the enemy at the start of a battle.
+        /// </summary>
+        if (enemyLvl > playerLvl)
         {
             currentEnemy = "a big one, this will be tough!";
         }
@@ -230,6 +303,9 @@ public class MainFunction : MonoBehaviour
 
     public void GetEnemyStatsFunc()
     {
+        /// <summary>
+        /// Assigns stats for enemy.
+        /// </summary>
         enemyLvl = Random.Range(playerLvl - 6, playerLvl + 1);
         if (enemyLvl < 1)
         {
@@ -271,6 +347,9 @@ public class MainFunction : MonoBehaviour
 
     public void GetPlayerStatsFunc()
     {
+        /// <summary>
+        /// Assigns stats for player.
+        /// </summary>
         lvlBuffer = playerLvl;
         GetStatsFunc();
         playerAtk = tmpStats;
