@@ -34,7 +34,7 @@ public class MainFunction : MonoBehaviour
     public string enCol = "<color=#CB0606>";
     public string endCol = "</color>";
     public bool searchStatus = true;
-    public bool BattleWon = false;
+    public bool battleWon = false;
     public int expObtained;
     public int expNeeded = 20;
     public bool lvlUp = false;
@@ -58,7 +58,7 @@ public class MainFunction : MonoBehaviour
         /// <summary>
         /// The main sequence of events in the game to be repeated.
         /// </summary>
-        BattleWon = false;
+        battleWon = false;
         Debug.Log(narCol + "Begin Fishing" + endCol);
         EnemySearch();
         StartBattle();
@@ -69,7 +69,7 @@ public class MainFunction : MonoBehaviour
         /// <summary>
         /// Gameplay logic that constantly runs.
         /// </summary>
-        if (BattleWon)
+        if (battleWon)
         {
             /// <summary>
             /// Runs if a battle was won. Sets up for next battle or purges game based on input.
@@ -203,13 +203,14 @@ public class MainFunction : MonoBehaviour
             /// </summary>
             Debug.Log(narCol + "Enemy Defeated!" + endCol);
             expObtained = Random.Range(20+enemyLvl, 20+(enemyLvl*10));
-            BattleWon = true;
+            battleWon = true;
             if (expObtained >= expNeeded) 
             {
                 /// <summary>
                 /// Sets stage for level up sequence.
                 /// </summary>
                 Debug.Log(narCol + "Leveled Up!" + endCol);
+                expObtained = expObtained - expNeeded;
                 playerLvl += 1;
                 lvlUp = true;
                 Debug.Log(narCol + "Reroll Player Stats? (Y/N)" + endCol);
@@ -222,7 +223,7 @@ public class MainFunction : MonoBehaviour
             /// Runs player defeated sequence.
             /// </summary>
             Debug.Log(narCol + "You were defeated" + endCol);
-            BattleWon = true;
+            battleWon = true;
             Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
             playerHP = currentplayerHP - playerHP;
         }
