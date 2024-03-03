@@ -225,7 +225,6 @@ public class MainFunction : MonoBehaviour
             Debug.Log(narCol + "You were defeated" + endCol);
             battleWon = true;
             Debug.Log(narCol + "Continue Fishing? (Y/N)" + endCol);
-            playerHP = currentplayerHP - playerHP;
         }
     }
 
